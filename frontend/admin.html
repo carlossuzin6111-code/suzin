@@ -1,0 +1,593 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administração - Cartões</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --card-hover: #1f2937;
+      --accent: #22c55e;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.08), transparent 25%),
+                  radial-gradient(circle at 80% 10%, rgba(34, 197, 94, 0.08), transparent 25%),
+                  var(--bg);
+      color: var(--text);
+      padding: 32px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 24px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+    }
+
+    h1 {
+      margin: 0 0 8px 0;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 1px solid #1f2937;
+      background: #111827;
+      color: var(--text);
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 140ms ease, border-color 140ms ease;
+    }
+
+    button:hover {
+      background: #182033;
+      border-color: #2c3749;
+    }
+
+    .accent {
+      background: var(--accent);
+      border-color: #16a34a;
+      color: #0b1220;
+    }
+
+    .accent:hover {
+      background: #16a34a;
+    }
+
+    .panel {
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      background: #0d1423;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    input[readonly] {
+      background: #0a0f1a;
+      cursor: not-allowed;
+      opacity: 0.7;
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .card-item {
+      background: #0d1423;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 16px;
+      transition: transform 140ms ease, border-color 140ms ease;
+    }
+
+    .card-item:hover {
+      transform: translateY(-2px);
+      border-color: #2c3749;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .card-number {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .card-status {
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-ativo {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--accent);
+    }
+
+    .status-inativo {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+    }
+
+    .card-info {
+      margin-bottom: 12px;
+    }
+
+    .card-info-item {
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: var(--muted);
+    }
+
+    .card-info-item strong {
+      color: var(--text);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-backdrop.open {
+      display: flex;
+    }
+
+    .modal {
+      background: #0c1322;
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      width: min(500px, 90vw);
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    }
+
+    .modal-header {
+      padding: 20px 24px;
+      border-bottom: 1px solid #1f2937;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-body {
+      padding: 24px;
+    }
+
+    .modal-footer {
+      padding: 20px 24px;
+      border-top: 1px solid #1f2937;
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translate(-50%, 12px);
+      padding: 12px 14px;
+      background: #0f172a;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      color: var(--text);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      transition: opacity 140ms ease, transform 140ms ease;
+      pointer-events: none;
+      z-index: 30;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--muted);
+    }
+
+    .relatorio-section {
+      margin-bottom: 24px;
+      padding: 16px;
+      background: #0a0f1a;
+      border-radius: 12px;
+      border: 1px solid #1f2937;
+    }
+
+    .relatorio-section h3 {
+      margin: 0 0 12px 0;
+      font-size: 16px;
+      color: var(--accent);
+    }
+
+    .relatorio-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .relatorio-item {
+      padding: 12px;
+      background: #0d1423;
+      border-radius: 8px;
+      border: 1px solid #1f2937;
+    }
+
+    .relatorio-item-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+
+    .relatorio-item-value {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .relatorio-item-value.positive {
+      color: var(--accent);
+    }
+
+    .relatorio-item-value.negative {
+      color: var(--danger);
+    }
+
+    .relatorio-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    .relatorio-table th,
+    .relatorio-table td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    .relatorio-table th {
+      background: #0d1423;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .relatorio-table td {
+      color: var(--text);
+    }
+
+    .relatorio-table tr:hover {
+      background: #0a0f1a;
+    }
+
+    /* Estilos para o extrato */
+    #extratoContent {
+      scrollbar-width: thin;
+      scrollbar-color: #1f2937 #0a0f1a;
+    }
+
+    #extratoContent::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    #extratoContent::-webkit-scrollbar-track {
+      background: #0a0f1a;
+      border-radius: 8px;
+    }
+
+    #extratoContent::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 8px;
+    }
+
+    #extratoContent::-webkit-scrollbar-thumb:hover {
+      background: #2c3749;
+    }
+
+    input[type="date"],
+    input[type="time"] {
+      width: 100%;
+      padding: 10px;
+      background: #0d1423;
+      border: 1px solid #1f2937;
+      border-radius: 8px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    input[type="date"]:focus,
+    input[type="time"]:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>Administração de Cartões</h1>
+        <div style="display: flex; gap: 12px; margin-top: 12px;">
+          <a href="admin-itens.html" style="color: var(--accent); text-decoration: none; font-size: 14px; padding: 6px 12px; border: 1px solid var(--accent); border-radius: 8px; transition: all 140ms ease;">
+            Gerenciar Categorias e Itens
+          </a>
+          <a href="estoque.html" style="color: var(--info); text-decoration: none; font-size: 14px; padding: 6px 12px; border: 1px solid var(--info); border-radius: 8px; transition: all 140ms ease;">
+            Controle de Estoque
+          </a>
+          <a href="index.html" style="color: var(--text); text-decoration: none; font-size: 14px; padding: 6px 12px; border: 1px solid #1f2937; border-radius: 8px; transition: all 140ms ease;">
+            Voltar ao Menu
+          </a>
+        </div>
+      </div>
+      <p class="subtitle">Gerencie cartões, saldos e movimentações</p>
+    </header>
+
+    <div class="toolbar">
+      <button class="accent" id="btnNovoCartao">+ Novo Cartão</button>
+      <button id="btnRelatorio">Relatório de Movimentações</button>
+    </div>
+
+    <div class="panel">
+      <div class="search-box">
+        <input type="text" id="searchInput" placeholder="Buscar por número, nome ou documento..." />
+      </div>
+      <div class="grid" id="cartoesGrid"></div>
+    </div>
+  </div>
+
+  <!-- Modal Novo/Editar Cartão -->
+  <div class="modal-backdrop" id="modalCartao">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalCartaoTitle">Novo Cartão</h2>
+        <button class="modal-close" id="modalCartaoClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label for="cartaoNumero">Número do Cartão</label>
+          <input type="text" id="cartaoNumero" placeholder="Gerado automaticamente" readonly />
+        </div>
+        <div class="field">
+          <label for="cartaoNome">Nome</label>
+          <input type="text" id="cartaoNome" placeholder="Nome completo" />
+        </div>
+        <div class="field">
+          <label for="cartaoDocumento">Documento (CPF/CNPJ)</label>
+          <input type="text" id="cartaoDocumento" placeholder="000.000.000-00" />
+        </div>
+        <div class="field">
+          <label for="cartaoSaldoInicial">Saldo Inicial (opcional)</label>
+          <input type="number" id="cartaoSaldoInicial" placeholder="0.00" step="0.01" min="0" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalCartaoCancel">Cancelar</button>
+        <button class="accent" id="modalCartaoSave">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Recarga -->
+  <div class="modal-backdrop" id="modalRecarga">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Recarregar Cartão</h2>
+        <button class="modal-close" id="modalRecargaClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label>Cartão</label>
+          <input type="text" id="recargaCartaoInfo" readonly />
+        </div>
+        <div class="field">
+          <label>Saldo Atual</label>
+          <input type="text" id="recargaSaldoAtual" readonly />
+        </div>
+        <div class="field">
+          <label for="recargaValor">Valor da Recarga</label>
+          <input type="number" id="recargaValor" placeholder="0.00" step="0.01" min="0.01" />
+        </div>
+        <div class="field">
+          <label for="recargaDescricao">Descrição (opcional)</label>
+          <textarea id="recargaDescricao" rows="2" placeholder="Motivo da recarga..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalRecargaCancel">Cancelar</button>
+        <button class="accent" id="modalRecargaConfirm">Confirmar Recarga</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Relatório -->
+  <div class="modal-backdrop" id="modalRelatorio">
+    <div class="modal" style="width: min(800px, 90vw);">
+      <div class="modal-header">
+        <h2 class="modal-title">Relatório de Movimentações</h2>
+        <button class="modal-close" id="modalRelatorioClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="relatorioContent"></div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalRelatorioFechar">Fechar</button>
+        <button class="accent" onclick="window.print()">Imprimir</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Extrato -->
+  <div class="modal-backdrop" id="modalExtrato">
+    <div class="modal" style="width: min(900px, 90vw); max-height: 90vh;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalExtratoTitle">Extrato do Cartão</h2>
+        <button class="modal-close" id="modalExtratoClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div style="margin-bottom: 20px; padding: 16px; background: #0a0f1a; border-radius: 12px; border: 1px solid #1f2937;">
+          <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-bottom: 16px;">
+            <div class="field" style="margin: 0;">
+              <label for="extratoDataInicio">Data Início</label>
+              <input type="date" id="extratoDataInicio" />
+            </div>
+            <div class="field" style="margin: 0;">
+              <label for="extratoHoraInicio">Hora Início</label>
+              <input type="time" id="extratoHoraInicio" />
+            </div>
+            <div class="field" style="margin: 0;">
+              <label for="extratoDataFim">Data Fim</label>
+              <input type="date" id="extratoDataFim" />
+            </div>
+            <div class="field" style="margin: 0;">
+              <label for="extratoHoraFim">Hora Fim</label>
+              <input type="time" id="extratoHoraFim" />
+            </div>
+          </div>
+          <div style="display: flex; gap: 8px;">
+            <button class="accent" onclick="filtrarExtrato()" style="flex: 1;">Filtrar</button>
+            <button onclick="limparFiltrosExtrato()">Limpar Filtros</button>
+          </div>
+        </div>
+        <div id="extratoContent" style="max-height: 400px; overflow-y: auto;">
+          <div class="empty-state">Carregando extrato...</div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalExtratoFechar">Fechar</button>
+        <button class="accent" onclick="window.print()">Imprimir</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="./api.js"></script>
+  <script src="./admin.js"></script>
+</body>
+</html>
+

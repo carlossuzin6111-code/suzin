@@ -1,0 +1,537 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administração - Categorias e Itens</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --card-hover: #1f2937;
+      --accent: #22c55e;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.08), transparent 25%),
+                  radial-gradient(circle at 80% 10%, rgba(34, 197, 94, 0.08), transparent 25%),
+                  var(--bg);
+      color: var(--text);
+      padding: 32px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 24px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      font-size: 14px;
+      transition: all 140ms ease;
+    }
+
+    .nav-links a:hover {
+      background: #182033;
+      border-color: #2c3749;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 8px;
+      box-shadow: var(--shadow);
+    }
+
+    .tab {
+      flex: 1;
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 140ms ease;
+    }
+
+    .tab.active {
+      background: var(--accent);
+      color: #0b1220;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 1px solid #1f2937;
+      background: #111827;
+      color: var(--text);
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 140ms ease, border-color 140ms ease;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #182033;
+      border-color: #2c3749;
+    }
+
+    .accent {
+      background: var(--accent);
+      border-color: #16a34a;
+      color: #0b1220;
+    }
+
+    .accent:hover {
+      background: #16a34a;
+    }
+
+    .danger {
+      background: var(--danger);
+      border-color: #dc2626;
+      color: #fff;
+    }
+
+    .danger:hover {
+      background: #dc2626;
+    }
+
+    .panel {
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    input, textarea {
+      width: 100%;
+      padding: 12px;
+      background: #0d1423;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    .card-item {
+      background: #0d1423;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 16px;
+      transition: transform 140ms ease, border-color 140ms ease;
+    }
+
+    .card-item:hover {
+      transform: translateY(-2px);
+      border-color: #2c3749;
+    }
+
+    .card-item.inactive {
+      opacity: 0.6;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card-status {
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-ativo {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--accent);
+    }
+
+    .status-inativo {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+    }
+
+    .card-img {
+      width: 100%;
+      height: 120px;
+      object-fit: cover;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      background: #0a0f1a;
+    }
+
+    .card-info {
+      margin-bottom: 12px;
+    }
+
+    .card-info-item {
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: var(--muted);
+    }
+
+    .card-info-item strong {
+      color: var(--text);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .card-actions button {
+      flex: 1;
+      padding: 8px;
+      font-size: 12px;
+    }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal {
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 24px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+
+    .modal-close:hover {
+      background: #1f2937;
+      color: var(--text);
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      justify-content: flex-end;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: var(--text);
+      padding: 12px 24px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .items-list {
+      margin-top: 16px;
+    }
+
+    .item-row {
+      background: #0a0f1a;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .item-row.inactive {
+      opacity: 0.6;
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-name {
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .item-price {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .item-actions button {
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Administração - Categorias e Itens</h1>
+      <div class="nav-links">
+        <a href="index.html">Voltar ao Menu</a>
+        <a href="admin.html">Cartões</a>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="categorias">Categorias</button>
+      <button class="tab" data-tab="itens">Itens</button>
+    </div>
+
+    <!-- Tab Categorias -->
+    <div id="categoriasTab" class="tab-content active">
+      <div class="panel">
+        <div class="toolbar">
+          <button class="accent" id="btnNovaCategoria">+ Nova Categoria</button>
+          <input type="text" id="searchCategoria" placeholder="Buscar categoria..." class="field" style="flex: 1; margin: 0;" />
+        </div>
+        <div class="grid" id="categoriasGrid"></div>
+      </div>
+    </div>
+
+    <!-- Tab Itens -->
+    <div id="itensTab" class="tab-content">
+      <div class="panel">
+        <div class="toolbar">
+          <button class="accent" id="btnNovoItem">+ Novo Item</button>
+          <select id="filterCategoria" style="padding: 10px 16px; background: #0d1423; border: 1px solid #1f2937; border-radius: 12px; color: var(--text); font-size: 14px;">
+            <option value="">Todas as categorias</option>
+          </select>
+          <input type="text" id="searchItem" placeholder="Buscar item..." class="field" style="flex: 1; margin: 0;" />
+        </div>
+        <div id="itensList"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Categoria -->
+  <div class="modal-backdrop" id="modalCategoria">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalCategoriaTitle">Nova Categoria</h2>
+        <button class="modal-close" id="modalCategoriaClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label for="categoriaTitulo">Título</label>
+          <input type="text" id="categoriaTitulo" placeholder="Ex: Refrigerantes" />
+        </div>
+        <div class="field">
+          <label for="categoriaImg">URL da Imagem</label>
+          <input type="text" id="categoriaImg" placeholder="https://..." />
+        </div>
+        <div class="field">
+          <label>
+            <input type="checkbox" id="categoriaAtivo" checked style="width: auto; margin-right: 8px;" />
+            Categoria Ativa
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalCategoriaCancel">Cancelar</button>
+        <button class="accent" id="modalCategoriaSave">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Item -->
+  <div class="modal-backdrop" id="modalItem">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalItemTitle">Novo Item</h2>
+        <button class="modal-close" id="modalItemClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label for="itemCategoria">Categoria</label>
+          <select id="itemCategoria" style="padding: 12px; background: #0d1423; border: 1px solid #1f2937; border-radius: 12px; color: var(--text); font-size: 14px; width: 100%;">
+            <option value="">Selecione uma categoria</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="itemNome">Nome</label>
+          <input type="text" id="itemNome" placeholder="Ex: Coca-Cola Lata" />
+        </div>
+        <div class="field">
+          <label for="itemPreco">Preço (R$)</label>
+          <input type="text" id="itemPreco" placeholder="Ex: 6,00" />
+        </div>
+        <div class="field">
+          <label for="itemDesc">Descrição</label>
+          <input type="text" id="itemDesc" placeholder="Ex: 350ml" />
+        </div>
+        <div class="field">
+          <label>
+            <input type="checkbox" id="itemAtivo" checked style="width: auto; margin-right: 8px;" />
+            Item Ativo
+          </label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalItemCancel">Cancelar</button>
+        <button class="accent" id="modalItemSave">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./api.js"></script>
+  <script src="admin-itens.js"></script>
+</body>
+</html>
+

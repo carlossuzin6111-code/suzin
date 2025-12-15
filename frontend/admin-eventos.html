@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Administração - Eventos</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --card-hover: #1f2937;
+      --accent: #22c55e;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.08), transparent 25%),
+                  radial-gradient(circle at 80% 10%, rgba(34, 197, 94, 0.08), transparent 25%),
+                  var(--bg);
+      color: var(--text);
+      padding: 32px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 24px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      font-size: 14px;
+      transition: all 140ms ease;
+    }
+
+    .nav-links a:hover {
+      background: #182033;
+      border-color: #2c3749;
+    }
+
+    .panel {
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 1px solid #1f2937;
+      background: #111827;
+      color: var(--text);
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 140ms ease, border-color 140ms ease;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #182033;
+      border-color: #2c3749;
+    }
+
+    .accent {
+      background: var(--accent);
+      border-color: #16a34a;
+      color: #0b1220;
+    }
+
+    .accent:hover {
+      background: #16a34a;
+    }
+
+    .danger {
+      background: var(--danger);
+      border-color: #dc2626;
+      color: #fff;
+    }
+
+    .danger:hover {
+      background: #dc2626;
+    }
+
+    .warning {
+      background: var(--warning);
+      border-color: #d97706;
+      color: #0b1220;
+    }
+
+    .warning:hover {
+      background: #d97706;
+    }
+
+    .info {
+      background: var(--info);
+      border-color: #2563eb;
+      color: #fff;
+    }
+
+    .info:hover {
+      background: #2563eb;
+    }
+
+    input, textarea, select {
+      width: 100%;
+      padding: 12px;
+      background: #0d1423;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 16px;
+    }
+
+    .card-item {
+      background: #0d1423;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 16px;
+      transition: transform 140ms ease, border-color 140ms ease;
+    }
+
+    .card-item:hover {
+      transform: translateY(-2px);
+      border-color: #2c3749;
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card-status {
+      padding: 4px 8px;
+      border-radius: 8px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .status-ativo {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--accent);
+    }
+
+    .status-finalizado {
+      background: rgba(156, 163, 175, 0.2);
+      color: var(--muted);
+    }
+
+    .card-info {
+      margin-bottom: 12px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    .card-info-item {
+      margin-bottom: 4px;
+    }
+
+    .card-info-item strong {
+      color: var(--text);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+      flex-wrap: wrap;
+    }
+
+    .card-actions button {
+      flex: 1;
+      padding: 8px;
+      font-size: 12px;
+      min-width: 100px;
+    }
+
+    .evento-menu-container {
+      position: relative;
+    }
+
+    .evento-menu-btn {
+      background: none !important;
+      border: none !important;
+      color: var(--muted) !important;
+      cursor: pointer;
+      padding: 4px 8px;
+      font-size: 18px;
+      line-height: 1;
+      transition: color 140ms ease;
+      border-radius: 8px;
+    }
+
+    .evento-menu-btn:hover {
+      color: var(--text) !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+    }
+
+    .evento-menu-dropdown {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 4px;
+      background: #0d1423;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 4px;
+      min-width: 150px;
+      z-index: 100;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .evento-menu-item {
+      width: 100%;
+      padding: 10px 12px;
+      background: none;
+      border: none;
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+      border-radius: 8px;
+      font-size: 13px;
+      transition: background 140ms ease;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .evento-menu-item:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .evento-menu-item.danger {
+      color: #ef4444;
+    }
+
+    .evento-menu-item.danger:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #f87171;
+    }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal {
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 24px;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+
+    .modal-close:hover {
+      background: #1f2937;
+      color: var(--text);
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      justify-content: flex-end;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: var(--text);
+      padding: 12px 24px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .itens-list {
+      margin-top: 16px;
+      max-height: 300px;
+      overflow-y: auto;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 12px;
+      background: #0a0f1a;
+    }
+
+    .item-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 8px 0;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    .item-row:last-child {
+      border-bottom: none;
+    }
+
+    .item-info {
+      flex: 1;
+    }
+
+    .item-name {
+      font-weight: 600;
+      margin-bottom: 2px;
+    }
+
+    .item-quantity {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .item-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .item-actions button {
+      padding: 4px 8px;
+      font-size: 11px;
+    }
+
+    @media print {
+      .modal-backdrop.active {
+        position: static;
+        background: transparent;
+      }
+      .modal {
+        box-shadow: none;
+        border: none;
+      }
+      .modal-footer {
+        display: none;
+      }
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    table th,
+    table td {
+      padding: 12px;
+      text-align: left;
+    }
+
+    table th {
+      background: #0a0f1a;
+      font-weight: 600;
+      border-bottom: 2px solid #1f2937;
+    }
+
+    table td {
+      border-bottom: 1px solid #1f2937;
+    }
+
+    table tr:last-child td {
+      border-bottom: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Administração - Eventos</h1>
+      <div class="nav-links">
+        <a href="index.html">Voltar ao Menu</a>
+        <a href="admin.html">Cartões</a>
+        <a href="admin-itens.html">Categorias e Itens</a>
+        <a href="estoque.html">Estoque</a>
+      </div>
+    </header>
+
+    <div class="panel">
+      <div class="toolbar">
+        <button class="accent" id="btnNovoEvento" onclick="window.novoEvento && window.novoEvento(); return false;">+ Novo Evento</button>
+        <button class="info" id="btnRelatorio">📊 Relatório Geral</button>
+        <input type="text" id="searchEvento" placeholder="Buscar evento..." style="flex: 1; margin: 0;" />
+      </div>
+      <div class="grid" id="eventosGrid"></div>
+    </div>
+  </div>
+
+  <!-- Modal Novo Evento -->
+  <div class="modal-backdrop" id="modalEvento">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalEventoTitle">Novo Evento</h2>
+        <button class="modal-close" id="modalEventoClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label for="eventoNome">Nome do Evento</label>
+          <input type="text" id="eventoNome" placeholder="Ex: Festa de Aniversário" />
+        </div>
+        <div class="field">
+          <label for="eventoData">Data do Evento</label>
+          <input type="date" id="eventoData" />
+        </div>
+        <div class="field">
+          <label for="eventoDescricao">Descrição</label>
+          <textarea id="eventoDescricao" rows="3" placeholder="Descrição do evento..."></textarea>
+        </div>
+        <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #1f2937;">
+          <h3 style="margin: 0 0 16px 0; font-size: 16px;">Bebidas Iniciais</h3>
+          <div class="toolbar" style="margin-bottom: 16px;">
+            <select id="eventoProduto" style="flex: 1;">
+              <option value="">Selecione um produto</option>
+            </select>
+            <input type="number" id="eventoQuantidade" placeholder="Qtd" min="1" step="1" style="width: 100px; margin: 0 8px;" />
+            <button class="accent" id="btnAdicionarItemEvento">Adicionar</button>
+          </div>
+          <div id="eventoItensList" class="itens-list">
+            <p style="text-align: center; color: var(--muted); margin: 0;">Nenhum item adicionado</p>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalEventoCancel">Cancelar</button>
+        <button class="accent" id="modalEventoSave">Criar Evento</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Reposição -->
+  <div class="modal-backdrop" id="modalReposicao">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Reposição de Bebidas</h2>
+        <button class="modal-close" id="modalReposicaoClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label for="reposicaoProduto">Produto</label>
+          <select id="reposicaoProduto">
+            <option value="">Selecione um produto</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="reposicaoQuantidade">Quantidade</label>
+          <input type="number" id="reposicaoQuantidade" placeholder="0" min="1" step="1" />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalReposicaoCancel">Cancelar</button>
+        <button class="accent" id="modalReposicaoSave">Adicionar Reposição</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Finalização -->
+  <div class="modal-backdrop" id="modalFinalizacao">
+    <div class="modal" style="max-width: 700px;">
+      <div class="modal-header">
+        <h2 class="modal-title">Finalizar Evento</h2>
+        <button class="modal-close" id="modalFinalizacaoClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="margin-bottom: 20px; color: var(--muted);">Informe a quantidade física restante de cada item:</p>
+        <div id="finalizacaoItensList" style="max-height: 400px; overflow-y: auto;">
+          <!-- Itens serão inseridos aqui -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalFinalizacaoCancel">Cancelar</button>
+        <button class="accent" id="modalFinalizacaoSave" onclick="confirmarFinalizacao()">Finalizar Evento</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Relatório -->
+  <div class="modal-backdrop" id="modalRelatorio">
+    <div class="modal" style="max-width: 800px;">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalRelatorioTitle">Relatório do Evento</h2>
+        <button class="modal-close" id="modalRelatorioClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div id="relatorioConteudo">
+          <!-- Conteúdo do relatório será inserido aqui -->
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="accent" onclick="window.print()">Imprimir</button>
+        <button id="modalRelatorioCloseBtn">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./api.js"></script>
+  <script src="admin-eventos.js"></script>
+</body>
+</html>
+

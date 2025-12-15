@@ -1,0 +1,125 @@
+[
+  {
+    "id": "refrigerantes",
+    "titulo": "Refrigerantes",
+    "img": "https://i.ibb.co/8DWyqRjT/refrigerante.png",
+    "itens": [
+      {
+        "nome": "Coca-Cola Lata",
+        "preco": "R$ 9",
+        "desc": "350ml",
+        "ativo": true,
+        "id": 1765538224096.0017
+      },
+      {
+        "nome": "Guaraná Lata",
+        "preco": "R$ 7",
+        "desc": "350ml",
+        "ativo": true,
+        "id": 1765538224096.247
+      },
+      {
+        "nome": "Sprite Lata",
+        "preco": "R$ 7",
+        "desc": "350ml",
+        "ativo": true,
+        "id": 1765538224096.1172
+      }
+    ],
+    "ativo": true
+  },
+  {
+    "id": "porcoes",
+    "titulo": "Porções",
+    "img": "https://i.ibb.co/qFxWFY7Y/porcao.png",
+    "itens": [
+      {
+        "nome": "Batata Frita",
+        "preco": "R$ 24,00",
+        "desc": "500g crocante",
+        "ativo": true,
+        "id": 1765538224096.9885
+      },
+      {
+        "nome": "Iscas de Frango",
+        "preco": "R$ 32,00",
+        "desc": "500g com molho",
+        "ativo": true,
+        "id": 1765538224096.9163
+      },
+      {
+        "nome": "Anéis de Cebola",
+        "preco": "R$ 22,00",
+        "desc": "Porção média",
+        "ativo": true,
+        "id": 1765538224096.652
+      }
+    ],
+    "ativo": true
+  },
+  {
+    "id": "hamburguer",
+    "titulo": "Hambúrguer",
+    "img": "https://i.ibb.co/sphwvfNN/hamburguer.png",
+    "itens": [
+      {
+        "nome": "Clássico",
+        "preco": "R$ 28,00",
+        "desc": "Blend 160g, queijo, salada",
+        "ativo": true,
+        "id": 1765538224096.0752
+      },
+      {
+        "nome": "Cheddar Bacon",
+        "preco": "R$ 32,00",
+        "desc": "Cheddar cremoso e bacon",
+        "ativo": true,
+        "id": 1765538224096.1228
+      },
+      {
+        "nome": "Veggie",
+        "preco": "R$ 29,00",
+        "desc": "Grão-de-bico, maionese verde",
+        "ativo": true,
+        "id": 1765538224096.3433
+      }
+    ],
+    "ativo": true
+  },
+  {
+    "id": "chop",
+    "titulo": "Chop",
+    "img": "https://i.ibb.co/7dvx8jzP/chopp.png",
+    "itens": [
+      {
+        "nome": "Pilsen 300ml",
+        "preco": "R$ 8,00",
+        "desc": "Taça",
+        "ativo": true,
+        "id": 1765538224096.7336
+      },
+      {
+        "nome": "Pilsen 500ml",
+        "preco": "R$ 12,00",
+        "desc": "Caneca",
+        "ativo": true,
+        "id": 1765538224096.7395
+      },
+      {
+        "nome": "IPA 500ml",
+        "preco": "R$ 16,00",
+        "desc": "Caneca",
+        "ativo": true,
+        "id": 1765538224096.277
+      }
+    ],
+    "ativo": true
+  },
+  {
+    "id": "cerveja",
+    "titulo": "Cerveja",
+    "img": "https://i.ibb.co/B2XqY18p/cerveja.png",
+    "ativo": true,
+    "itens": []
+  }
+]

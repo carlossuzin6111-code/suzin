@@ -1,0 +1,682 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Controle de Estoque</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --card-hover: #1f2937;
+      --accent: #22c55e;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --info: #3b82f6;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.08), transparent 25%),
+                  radial-gradient(circle at 80% 10%, rgba(34, 197, 94, 0.08), transparent 25%),
+                  var(--bg);
+      color: var(--text);
+      padding: 32px;
+    }
+
+    .container {
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    header {
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 24px;
+      padding: 24px 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 24px;
+      letter-spacing: -0.02em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .nav-links a {
+      color: var(--text);
+      text-decoration: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      font-size: 14px;
+      transition: all 140ms ease;
+    }
+
+    .nav-links a:hover {
+      background: #182033;
+      border-color: #2c3749;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 24px;
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 8px;
+      box-shadow: var(--shadow);
+      flex-wrap: wrap;
+    }
+
+    .tab {
+      flex: 1;
+      min-width: 150px;
+      padding: 12px 24px;
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 12px;
+      transition: all 140ms ease;
+    }
+
+    .tab.active {
+      background: var(--accent);
+      color: #0b1220;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .panel {
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 24px;
+      box-shadow: var(--shadow);
+      margin-bottom: 24px;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: 1px solid #1f2937;
+      background: #111827;
+      color: var(--text);
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 140ms ease, border-color 140ms ease;
+      font-size: 14px;
+    }
+
+    button:hover {
+      background: #182033;
+      border-color: #2c3749;
+    }
+
+    .accent {
+      background: var(--accent);
+      border-color: #16a34a;
+      color: #0b1220;
+    }
+
+    .accent:hover {
+      background: #16a34a;
+    }
+
+    .danger {
+      background: var(--danger);
+      border-color: #dc2626;
+      color: #fff;
+    }
+
+    .danger:hover {
+      background: #dc2626;
+    }
+
+    .warning {
+      background: var(--warning);
+      border-color: #d97706;
+      color: #0b1220;
+    }
+
+    .warning:hover {
+      background: #d97706;
+    }
+
+    .info {
+      background: var(--info);
+      border-color: #2563eb;
+      color: #fff;
+    }
+
+    .info:hover {
+      background: #2563eb;
+    }
+
+    input, select, textarea {
+      width: 100%;
+      padding: 12px;
+      background: #0d1423;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--accent);
+    }
+
+    .field {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--muted);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 16px;
+    }
+
+    .card-item {
+      background: #0d1423;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 16px;
+      transition: transform 140ms ease, border-color 140ms ease;
+    }
+
+    .card-item:hover {
+      transform: translateY(-2px);
+      border-color: #2c3749;
+    }
+
+    .card-item.baixo-estoque {
+      border-color: var(--warning);
+      background: rgba(245, 158, 11, 0.05);
+    }
+
+    .card-item.sem-estoque {
+      border-color: var(--danger);
+      background: rgba(239, 68, 68, 0.05);
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: start;
+      margin-bottom: 12px;
+    }
+
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .card-quantidade {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+
+    .card-info {
+      margin-bottom: 12px;
+    }
+
+    .card-info-item {
+      font-size: 13px;
+      margin-bottom: 4px;
+      color: var(--muted);
+    }
+
+    .card-info-item strong {
+      color: var(--text);
+    }
+
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      margin-top: 12px;
+    }
+
+    .card-actions button {
+      flex: 1;
+      padding: 8px;
+      font-size: 12px;
+    }
+
+    .search-box {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+    }
+
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.7);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-backdrop.active {
+      display: flex;
+    }
+
+    .modal {
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 24px;
+      max-width: 500px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+    }
+
+    .modal-title {
+      margin: 0;
+      font-size: 20px;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+    }
+
+    .modal-close:hover {
+      background: #1f2937;
+      color: var(--text);
+    }
+
+    .modal-footer {
+      display: flex;
+      gap: 12px;
+      margin-top: 24px;
+      justify-content: flex-end;
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: var(--text);
+      padding: 12px 24px;
+      border-radius: 12px;
+      box-shadow: var(--shadow);
+      z-index: 2000;
+      opacity: 0;
+      transition: opacity 200ms ease;
+    }
+
+    .toast.show {
+      opacity: 1;
+    }
+
+    .historico-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 16px;
+    }
+
+    .historico-table th,
+    .historico-table td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    .historico-table th {
+      background: #0a0f1a;
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .historico-table td {
+      font-size: 13px;
+    }
+
+    .badge {
+      padding: 4px 8px;
+      border-radius: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .badge-entrada {
+      background: rgba(34, 197, 94, 0.2);
+      color: var(--accent);
+    }
+
+    .badge-saida {
+      background: rgba(239, 68, 68, 0.2);
+      color: var(--danger);
+    }
+
+    .badge-transferencia {
+      background: rgba(59, 130, 246, 0.2);
+      color: var(--info);
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .stat-card {
+      background: #0d1423;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--accent);
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Controle de Estoque</h1>
+      <div class="nav-links">
+        <a href="index.html">Voltar ao Menu</a>
+        <a href="admin.html">Cartões</a>
+        <a href="admin-itens.html">Categorias e Itens</a>
+      </div>
+    </header>
+
+    <div class="tabs">
+      <button class="tab active" data-tab="geladeiras">Geladeiras</button>
+      <button class="tab" data-tab="camera-fria">Câmera Fria</button>
+      <button class="tab" data-tab="historico">Histórico</button>
+    </div>
+
+    <!-- Tab Geladeiras -->
+    <div id="geladeirasTab" class="tab-content active">
+      <div class="panel">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total de Produtos</div>
+            <div class="stat-value" id="totalGeladeiras">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Valor Total</div>
+            <div class="stat-value" id="valorTotalGeladeiras">R$ 0,00</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Produtos em Baixo Estoque</div>
+            <div class="stat-value" id="baixoEstoqueGeladeiras">0</div>
+          </div>
+        </div>
+        <div class="toolbar">
+          <button class="accent" id="btnNovoProdutoGeladeira">+ Novo Produto</button>
+          <button class="info" id="btnEntradaGeladeira">+ Entrada</button>
+          <button class="warning" id="btnSaidaGeladeira">- Saída</button>
+          <button class="info" id="btnTransferirParaGeladeira">Transferir da Câmera Fria</button>
+          <input type="text" id="searchGeladeira" placeholder="Buscar produto..." style="flex: 1; margin: 0;" />
+        </div>
+        <div class="grid" id="geladeirasGrid"></div>
+      </div>
+    </div>
+
+    <!-- Tab Câmera Fria -->
+    <div id="camera-friaTab" class="tab-content">
+      <div class="panel">
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Total de Produtos</div>
+            <div class="stat-value" id="totalCameraFria">0</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Valor Total</div>
+            <div class="stat-value" id="valorTotalCameraFria">R$ 0,00</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Produtos em Baixo Estoque</div>
+            <div class="stat-value" id="baixoEstoqueCameraFria">0</div>
+          </div>
+        </div>
+        <div class="toolbar">
+          <button class="accent" id="btnNovoProdutoCameraFria">+ Novo Produto</button>
+          <button class="info" id="btnEntradaCameraFria">+ Entrada</button>
+          <button class="warning" id="btnSaidaCameraFria">- Saída</button>
+          <button class="info" id="btnTransferirParaCameraFria">Transferir para Geladeiras</button>
+          <input type="text" id="searchCameraFria" placeholder="Buscar produto..." style="flex: 1; margin: 0;" />
+        </div>
+        <div class="grid" id="cameraFriaGrid"></div>
+      </div>
+    </div>
+
+    <!-- Tab Histórico -->
+    <div id="historicoTab" class="tab-content">
+      <div class="panel">
+        <div class="toolbar">
+          <select id="filterTipoMovimento" style="flex: 0 0 200px;">
+            <option value="">Todos os tipos</option>
+            <option value="entrada">Entrada</option>
+            <option value="saida">Saída</option>
+            <option value="transferencia">Transferência</option>
+          </select>
+          <select id="filterLocal" style="flex: 0 0 200px;">
+            <option value="">Todos os locais</option>
+            <option value="geladeiras">Geladeiras</option>
+            <option value="camera-fria">Câmera Fria</option>
+          </select>
+          <input type="text" id="searchHistorico" placeholder="Buscar no histórico..." style="flex: 1; margin: 0;" />
+        </div>
+        <div style="overflow-x: auto;">
+          <table class="historico-table">
+            <thead>
+              <tr>
+                <th>Data/Hora</th>
+                <th>Tipo</th>
+                <th>Local</th>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Valor Unit.</th>
+                <th>Total</th>
+                <th>Observação</th>
+              </tr>
+            </thead>
+            <tbody id="historicoTableBody">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Produto -->
+  <div class="modal-backdrop" id="modalProduto">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalProdutoTitle">Novo Produto</h2>
+        <button class="modal-close" id="modalProdutoClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label for="produtoNome">Nome do Produto</label>
+          <input type="text" id="produtoNome" placeholder="Ex: Coca-Cola Lata 350ml" />
+        </div>
+        <div class="field">
+          <label for="produtoCategoria">Categoria</label>
+          <select id="produtoCategoria">
+            <option value="">Selecione uma categoria</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="produtoQuantidade">Quantidade Inicial</label>
+          <input type="number" id="produtoQuantidade" placeholder="0" min="0" step="1" />
+        </div>
+        <div class="field">
+          <label for="produtoValorUnitario">Valor Unitário (R$)</label>
+          <input type="number" id="produtoValorUnitario" placeholder="0.00" min="0" step="0.01" />
+        </div>
+        <div class="field">
+          <label for="produtoEstoqueMinimo">Estoque Mínimo</label>
+          <input type="number" id="produtoEstoqueMinimo" placeholder="0" min="0" step="1" />
+        </div>
+        <div class="field">
+          <label for="produtoObservacao">Observação</label>
+          <textarea id="produtoObservacao" rows="3" placeholder="Observações adicionais..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalProdutoCancel">Cancelar</button>
+        <button class="accent" id="modalProdutoSave">Salvar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Movimentação -->
+  <div class="modal-backdrop" id="modalMovimentacao">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalMovimentacaoTitle">Entrada</h2>
+        <button class="modal-close" id="modalMovimentacaoClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label for="movProduto">Produto</label>
+          <select id="movProduto">
+            <option value="">Selecione um produto</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="movQuantidade">Quantidade</label>
+          <input type="number" id="movQuantidade" placeholder="0" min="1" step="1" />
+        </div>
+        <div class="field">
+          <label for="movObservacao">Observação</label>
+          <textarea id="movObservacao" rows="3" placeholder="Observações..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalMovimentacaoCancel">Cancelar</button>
+        <button class="accent" id="modalMovimentacaoSave">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Transferência -->
+  <div class="modal-backdrop" id="modalTransferencia">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title" id="modalTransferenciaTitle">Transferência</h2>
+        <button class="modal-close" id="modalTransferenciaClose">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="field">
+          <label for="transProduto">Produto</label>
+          <select id="transProduto">
+            <option value="">Selecione um produto</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="transQuantidade">Quantidade</label>
+          <input type="number" id="transQuantidade" placeholder="0" min="1" step="1" />
+        </div>
+        <div class="field">
+          <label for="transObservacao">Observação</label>
+          <textarea id="transObservacao" rows="3" placeholder="Observações..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="modalTransferenciaCancel">Cancelar</button>
+        <button class="accent" id="modalTransferenciaSave">Confirmar</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="./api.js"></script>
+  <script src="estoque.js"></script>
+</body>
+</html>
+

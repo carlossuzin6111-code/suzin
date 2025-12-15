@@ -1,0 +1,860 @@
+﻿<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍔</text></svg>" />
+  <title>Menu de Categorias</title>
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card: #111827;
+      --card-hover: #1f2937;
+      --accent: #22c55e;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      font-family: "Inter", system-ui, -apple-system, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, rgba(34, 197, 94, 0.08), transparent 25%),
+                  radial-gradient(circle at 80% 10%, rgba(34, 197, 94, 0.08), transparent 25%),
+                  var(--bg);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 32px;
+    }
+
+    .app {
+      width: min(1100px, 100%);
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 24px;
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    header {
+      padding: 24px 28px;
+      border-bottom: 1px solid #1f2937;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      position: relative;
+      flex-wrap: wrap;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      letter-spacing: -0.02em;
+    }
+
+    .screen {
+      padding: 28px;
+      display: none;
+      animation: fade 180ms ease-out;
+    }
+
+    .screen.active { display: block; }
+
+    @keyframes fade {
+      from { opacity: 0; transform: translateY(4px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 18px;
+    }
+
+    .card {
+      background: transparent;
+      border: none;
+      border-radius: 18px;
+      padding: 0;
+      display: block;
+      cursor: pointer;
+      transition: transform 140ms ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card:hover { transform: translateY(-3px); }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: #fff;
+    }
+
+    .card-img {
+      width: 100%;
+      aspect-ratio: 4 / 3;
+      object-fit: cover;
+      border-radius: 18px;
+      display: block;
+      border: none;
+      background: none;
+    }
+
+    .card-meta {
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.65) 100%);
+    }
+
+    .pill {
+      align-self: flex-start;
+      margin-top: 10px;
+      padding: 8px 10px;
+      border-radius: 12px;
+      border: 1px solid #1f2937;
+      color: var(--muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .toolbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .admin-btn {
+      text-decoration: none;
+      z-index: 1;
+    }
+
+    .admin-btn button {
+      font-size: 13px;
+      padding: 8px 16px;
+    }
+
+    button {
+      border: 1px solid #1f2937;
+      background: #111827;
+      color: var(--text);
+      padding: 10px 14px;
+      border-radius: 12px;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+      cursor: pointer;
+      transition: background 140ms ease, transform 140ms ease, border-color 140ms ease;
+    }
+
+    button:hover { background: #182033; border-color: #2c3749; }
+    button:active { transform: translateY(1px); }
+
+    .accent { background: var(--accent); border-color: #16a34a; color: #0b1220; }
+    .accent:hover { background: #16a34a; }
+
+    .items-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+    }
+
+    .item {
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 14px;
+      background: #0d1423;
+      cursor: pointer;
+      transition: transform 140ms ease, border-color 140ms ease, background 140ms ease;
+    }
+
+    .item:hover {
+      transform: translateY(-2px);
+      background: #121a2d;
+      border-color: #2c3749;
+    }
+
+    .item-title { font-weight: 700; margin-bottom: 6px; }
+    .item-price { color: var(--accent); font-weight: 700; }
+    .item-desc { color: var(--muted); margin: 6px 0 0 0; font-size: 13px; }
+
+    .breadcrumb {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    /* Novo: layout com carrinho flutuante */
+    .panel {
+      background: #0c1322;
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 16px;
+    }
+
+    .cart {
+      background: #0c1322;
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .cart-floating {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: min(360px, 92vw);
+      max-height: 75vh;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.45);
+      z-index: 20;
+      backdrop-filter: blur(4px);
+      display: none;
+    }
+
+    .cart-floating.visible { display: flex; }
+    .cart-floating:not(.open) { display: none; }
+
+    .cart-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .cart-title { font-weight: 700; }
+    .cart-sub { color: var(--muted); font-size: 13px; }
+
+    .close-btn {
+      border: none;
+      background: transparent;
+      color: var(--muted);
+      cursor: pointer;
+      font-weight: 700;
+      padding: 4px 8px;
+    }
+
+    .cart-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 320px;
+      overflow-y: auto;
+    }
+
+    .cart-item {
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 10px;
+      background: #0f172a;
+      display: grid;
+      gap: 6px;
+    }
+
+    .cart-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .cart-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .chip {
+      border: 1px solid #1f2937;
+      background: #111827;
+      color: var(--text);
+      padding: 6px 10px;
+      border-radius: 10px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background 120ms ease, border-color 120ms ease;
+    }
+
+    .chip:hover { background: #182033; border-color: #2c3749; }
+
+    .link-btn {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      padding: 0;
+    }
+
+    .add-btn {
+      margin-top: 10px;
+      width: 100%;
+      border-radius: 10px;
+      padding: 10px;
+      background: #111827;
+      border: 1px solid #1f2937;
+      color: var(--text);
+      cursor: pointer;
+      font-weight: 700;
+      transition: background 120ms ease, border-color 120ms ease;
+    }
+
+    .add-btn:hover { background: #182033; border-color: #2c3749; }
+
+    .cart-footer {
+      border-top: 1px solid #1f2937;
+      padding-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .cart-total span { color: var(--muted); font-size: 13px; }
+    .cart-total strong { display: block; font-size: 18px; }
+
+    .ghost {
+      background: transparent;
+      border: 1px solid #1f2937;
+      color: var(--muted);
+    }
+
+    .cart-fabs {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 21;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .cart-toggle {
+      background: var(--accent);
+      color: #0b1220;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      display: none;
+      cursor: pointer;
+    }
+
+    .cart-toggle.visible { display: inline-flex; }
+
+    .cart-finalize {
+      background: #22c55e;
+      color: #0b1220;
+      border: none;
+      padding: 12px 16px;
+      border-radius: 999px;
+      font-weight: 800;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      display: none;
+      cursor: pointer;
+    }
+
+    .cart-finalize.visible { display: inline-flex; }
+
+    @media (max-width: 700px) {
+      .cart-floating {
+        bottom: 12px;
+        right: 12px;
+        width: min(360px, 96vw);
+        max-height: 70vh;
+      }
+      .cart-fabs {
+        bottom: 12px;
+        right: 12px;
+        gap: 8px;
+      }
+    }
+
+    /* Toast de confirmação */
+    .toast {
+      position: fixed;
+      bottom: 16px;
+      left: 50%;
+      transform: translate(-50%, 12px);
+      padding: 12px 14px;
+      background: #0f172a;
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      color: var(--text);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      opacity: 0;
+      transition: opacity 140ms ease, transform 140ms ease;
+      pointer-events: none;
+      z-index: 30;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    /* Modal de finalização */
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 40;
+      padding: 16px;
+    }
+
+    .modal-backdrop.open { display: flex; }
+
+    .modal {
+      width: min(720px, 100%);
+      max-height: 80vh;
+      background: #0c1322;
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      box-shadow: 0 30px 80px rgba(0, 0, 0, 0.45);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+    }
+
+    .modal header,
+    .modal footer {
+      padding: 16px 18px;
+      border-bottom: 1px solid #1f2937;
+    }
+
+    .modal footer { border-top: 1px solid #1f2937; border-bottom: none; }
+
+    .modal-body {
+      padding: 16px 18px;
+      overflow-y: auto;
+      display: grid;
+      gap: 12px;
+    }
+
+    .modal-title { margin: 0; font-size: 18px; }
+    .modal-sub { color: var(--muted); font-size: 13px; margin-top: 4px; }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    .modal-item {
+      border: 1px solid #1f2937;
+      border-radius: 12px;
+      padding: 12px;
+      background: #0f172a;
+      display: grid;
+      gap: 8px;
+    }
+
+    .modal-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .modal-note {
+      width: 100%;
+      min-height: 60px;
+      background: #0c1322;
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      color: var(--text);
+      padding: 10px;
+      resize: vertical;
+    }
+
+    .field {
+      display: grid;
+      gap: 6px;
+    }
+
+    .field label { color: var(--muted); font-size: 13px; }
+
+    .field input {
+      background: #0c1322;
+      border: 1px solid #1f2937;
+      border-radius: 10px;
+      color: var(--text);
+      padding: 10px;
+      transition: border-color 200ms ease, box-shadow 200ms ease;
+    }
+
+    .field input.error {
+      border-color: var(--danger) !important;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.2);
+      animation: shake 0.5s ease-in-out;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+      20%, 40%, 60%, 80% { transform: translateX(5px); }
+    }
+
+    #tableInputError {
+      display: none;
+      color: var(--danger);
+      font-size: 13px;
+      margin-top: 6px;
+      font-weight: 600;
+      padding: 8px 12px;
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      border-radius: 8px;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    #tableInputError.show {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Menu Administrador */
+    .admin-menu-container {
+      position: relative;
+    }
+
+    .admin-btn {
+      background: var(--accent);
+      border: 1px solid #16a34a;
+      color: #0b1220;
+      padding: 10px 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 140ms ease;
+      font-size: 14px;
+    }
+
+    .admin-btn:hover {
+      background: #16a34a;
+    }
+
+    .admin-menu-dropdown {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      background: linear-gradient(145deg, #0b1220 0%, #0f1629 100%);
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.4);
+      min-width: 280px;
+      max-height: 80vh;
+      padding: 8px;
+      display: none;
+      flex-direction: column;
+      gap: 4px;
+      z-index: 1000;
+      animation: slideDown 200ms ease-out;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+    
+    /* Estilizar scrollbar do menu */
+    .admin-menu-dropdown::-webkit-scrollbar {
+      width: 8px;
+    }
+    
+    .admin-menu-dropdown::-webkit-scrollbar-track {
+      background: #0a0f1a;
+      border-radius: 8px;
+    }
+    
+    .admin-menu-dropdown::-webkit-scrollbar-thumb {
+      background: #1f2937;
+      border-radius: 8px;
+    }
+    
+    .admin-menu-dropdown::-webkit-scrollbar-thumb:hover {
+      background: #2c3749;
+    }
+
+    .admin-menu-dropdown.active {
+      display: flex;
+    }
+
+    @keyframes slideDown {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .admin-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      text-decoration: none;
+      color: var(--text);
+      transition: background 140ms ease;
+      border: 1px solid transparent;
+    }
+
+    .admin-menu-item:hover {
+      background: #0d1423;
+      border-color: #1f2937;
+    }
+
+    .admin-menu-item span {
+      font-size: 24px;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .admin-menu-item > div {
+      flex: 1;
+    }
+
+    .admin-menu-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 2px;
+      color: var(--text);
+    }
+
+    .admin-menu-desc {
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    /* Overlay para fechar o menu ao clicar fora */
+    .admin-menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 999;
+      display: none;
+    }
+
+    .admin-menu-overlay.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <p class="breadcrumb" id="breadcrumb">Categorias</p>
+        <h1 id="title">Selecione uma categoria</h1>
+      </div>
+      <div class="toolbar" style="display: flex; gap: 10px; align-items: center;">
+        <button id="backBtn" style="display:none">Voltar</button>
+        <div class="admin-menu-container">
+          <button id="adminMenuBtn" class="admin-btn">Administrador</button>
+          <div class="admin-menu-dropdown" id="adminMenuDropdown">
+            <a href="admin.html" class="admin-menu-item">
+              <span>💳</span>
+              <div>
+                <div class="admin-menu-title">Cartões</div>
+                <div class="admin-menu-desc">Gerenciar cartões de clientes</div>
+              </div>
+            </a>
+            <a href="admin-itens.html" class="admin-menu-item">
+              <span>📦</span>
+              <div>
+                <div class="admin-menu-title">Categorias e Itens</div>
+                <div class="admin-menu-desc">Gerenciar menu e produtos</div>
+              </div>
+            </a>
+            <a href="estoque.html" class="admin-menu-item">
+              <span>📊</span>
+              <div>
+                <div class="admin-menu-title">Estoque</div>
+                <div class="admin-menu-desc">Controle de inventário</div>
+              </div>
+            </a>
+            <a href="admin-eventos.html" class="admin-menu-item">
+              <span>🎉</span>
+              <div>
+                <div class="admin-menu-title">Eventos</div>
+                <div class="admin-menu-desc">Criar e gerenciar eventos</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section id="categoriesScreen" class="screen active">
+        <div class="grid" id="categoriesGrid"></div>
+      </section>
+
+      <section id="itemsScreen" class="screen">
+        <div class="panel">
+          <div class="items-list" id="itemsList"></div>
+        </div>
+      </section>
+
+      <section id="paymentScreen" class="screen">
+        <div class="panel" id="paymentPanel">
+          <h2 style="margin-top:0;margin-bottom:8px;">Pagamento</h2>
+          <p class="cart-sub" id="paymentInfo">Total: R$ 0,00</p>
+          <p class="cart-sub" style="margin-bottom: 16px; font-size: 12px;">
+            💡 <a href="./admin.html" target="_blank" style="color: var(--accent); text-decoration: underline;">Criar/gerenciar cartões</a>
+          </p>
+          <div class="field" id="cardManualField" style="display:block;">
+            <label for="cardNumber">Número do cartão</label>
+            <input id="cardNumber" type="text" inputmode="numeric" placeholder="0000 0000 0000 0000" />
+          </div>
+          <div class="field">
+            <label for="cardHolder">Nome</label>
+            <input id="cardHolder" type="text" placeholder="Aguardando..." readonly />
+          </div>
+          <div class="field">
+            <label for="cardBalance">Saldo</label>
+            <input id="cardBalance" type="text" placeholder="Aguardando..." readonly />
+          </div>
+          <div class="field">
+            <label for="cardTime">Horário</label>
+            <input id="cardTime" type="text" placeholder="Aguardando..." readonly />
+          </div>
+          <div id="cardStatus" style="margin-top: 12px; padding: 12px; border-radius: 12px; background: #0a0f1a; border: 1px solid #1f2937; display: none;">
+            <p style="margin: 0; font-size: 13px; color: var(--muted);" id="cardStatusText"></p>
+          </div>
+          <div class="cart-footer" style="padding:0; border:none; margin-top:16px;">
+            <button id="paymentBack" class="ghost">Voltar</button>
+            <button id="paymentConfirm" class="accent">Confirmar pagamento</button>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <aside class="cart cart-floating" id="cartFloating">
+    <div class="cart-header">
+      <div>
+        <div class="cart-title">Carrinho</div>
+        <div class="cart-sub" id="cartStatus">0 itens</div>
+      </div>
+      <div class="cart-actions">
+        <button id="clearCartBtn" class="ghost">Limpar</button>
+        <button id="closeCartBtn" class="close-btn">✕</button>
+      </div>
+    </div>
+    <div class="cart-list" id="cartList"></div>
+    <div class="cart-footer">
+      <div class="cart-total">
+        <span>Total</span>
+        <strong id="cartTotal">R$ 0,00</strong>
+      </div>
+      <button class="accent" id="checkoutBtn">Finalizar</button>
+    </div>
+  </aside>
+  <div class="cart-fabs" id="cartFabs">
+    <button class="cart-finalize" id="cartFinalize">Finalizar</button>
+    <button class="cart-toggle" id="cartToggle">Ver Carrinho (0)</button>
+  </div>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="modal-backdrop" id="checkoutModal">
+    <div class="modal">
+      <header class="modal-row">
+        <div>
+          <h2 class="modal-title">Finalizar pedido</h2>
+          <p class="modal-sub">Revise itens e adicione observações</p>
+        </div>
+        <button class="modal-close" id="modalClose">✕</button>
+      </header>
+      <div class="modal-body" id="modalBody">
+        <div id="modalItems"></div>
+        <div class="field">
+          <label for="tableInput">Mesa / Identificação <span style="color: var(--danger); font-weight: 700; font-size: 16px;">*</span> <span style="color: var(--danger); font-size: 12px;">(Obrigatório)</span></label>
+          <input id="tableInput" type="text" placeholder="Ex: Mesa 12" required />
+          <div id="tableInputError"></div>
+        </div>
+      </div>
+      <footer class="modal-row" style="display:flex;align-items:center;justify-content:space-between;gap:12px;">
+        <div class="cart-total">
+          <span>Total</span>
+          <strong id="modalTotal">R$ 0,00</strong>
+        </div>
+        <button class="accent" id="modalConfirm">Confirmar</button>
+      </footer>
+    </div>
+  </div>
+
+  <div class="admin-menu-overlay" id="adminMenuOverlay"></div>
+  <script>
+    // Menu Administrador
+    const adminMenuBtn = document.getElementById('adminMenuBtn');
+    const adminMenuDropdown = document.getElementById('adminMenuDropdown');
+    const adminMenuOverlay = document.getElementById('adminMenuOverlay');
+
+    function toggleAdminMenu() {
+      const isActive = adminMenuDropdown.classList.contains('active');
+      adminMenuDropdown.classList.toggle('active');
+      adminMenuOverlay.classList.toggle('active');
+    }
+
+    function closeAdminMenu() {
+      adminMenuDropdown.classList.remove('active');
+      adminMenuOverlay.classList.remove('active');
+    }
+
+    if (adminMenuBtn) {
+      adminMenuBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        toggleAdminMenu();
+      });
+    }
+
+    if (adminMenuOverlay) {
+      adminMenuOverlay.addEventListener('click', closeAdminMenu);
+    }
+
+    // Fechar menu ao clicar em qualquer item
+    document.querySelectorAll('.admin-menu-item').forEach(item => {
+      item.addEventListener('click', () => {
+        closeAdminMenu();
+      });
+    });
+
+    // Fechar menu ao pressionar ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && adminMenuDropdown.classList.contains('active')) {
+        closeAdminMenu();
+      }
+    });
+  </script>
+  <script src="./api.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
+

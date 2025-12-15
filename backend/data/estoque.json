@@ -1,0 +1,137 @@
+{
+  "geladeiras": [
+    {
+      "id": 1765540493172,
+      "nome": "Coca-Cola Lata",
+      "categoria": "Refrigerantes",
+      "quantidade": 20,
+      "valorUnitario": 9,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.158Z",
+      "updatedAt": "2025-12-14T02:09:00.329Z"
+    },
+    {
+      "id": 1765540494163,
+      "nome": "Guaraná Lata",
+      "categoria": "Refrigerantes",
+      "quantidade": 0,
+      "valorUnitario": 7,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.158Z",
+      "updatedAt": "2025-12-14T02:09:00.346Z"
+    },
+    {
+      "id": 1765540495182,
+      "nome": "Sprite Lata",
+      "categoria": "Refrigerantes",
+      "quantidade": 0,
+      "valorUnitario": 7,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.158Z",
+      "updatedAt": "2025-12-14T02:07:10.591Z"
+    },
+    {
+      "id": 1765540496210,
+      "nome": "Batata Frita",
+      "categoria": "Porções",
+      "quantidade": 0,
+      "valorUnitario": 24,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.158Z",
+      "updatedAt": "2025-12-14T02:07:10.591Z"
+    },
+    {
+      "id": 1765540497160,
+      "nome": "Iscas de Frango",
+      "categoria": "Porções",
+      "quantidade": 0,
+      "valorUnitario": 32,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.158Z",
+      "updatedAt": "2025-12-14T02:07:10.591Z"
+    },
+    {
+      "id": 1765540498188,
+      "nome": "Anéis de Cebola",
+      "categoria": "Porções",
+      "quantidade": 0,
+      "valorUnitario": 22,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.158Z",
+      "updatedAt": "2025-12-14T02:07:10.591Z"
+    },
+    {
+      "id": 1765540499245,
+      "nome": "Clássico",
+      "categoria": "Hambúrguer",
+      "quantidade": 0,
+      "valorUnitario": 28,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.158Z",
+      "updatedAt": "2025-12-14T02:07:10.591Z"
+    },
+    {
+      "id": 1765540500251,
+      "nome": "Cheddar Bacon",
+      "categoria": "Hambúrguer",
+      "quantidade": 0,
+      "valorUnitario": 32,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.159Z",
+      "updatedAt": "2025-12-14T02:07:10.591Z"
+    },
+    {
+      "id": 1765540501159,
+      "nome": "Veggie",
+      "categoria": "Hambúrguer",
+      "quantidade": 0,
+      "valorUnitario": 29,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.159Z",
+      "updatedAt": "2025-12-14T02:07:10.591Z"
+    },
+    {
+      "id": 1765540502229,
+      "nome": "Pilsen 300ml",
+      "categoria": "Chop",
+      "quantidade": 0,
+      "valorUnitario": 8,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.159Z",
+      "updatedAt": "2025-12-14T02:07:10.591Z"
+    },
+    {
+      "id": 1765540503183,
+      "nome": "Pilsen 500ml",
+      "categoria": "Chop",
+      "quantidade": 0,
+      "valorUnitario": 12,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.159Z",
+      "updatedAt": "2025-12-14T02:07:10.591Z"
+    },
+    {
+      "id": 1765540504193,
+      "nome": "IPA 500ml",
+      "categoria": "Chop",
+      "quantidade": 0,
+      "valorUnitario": 16,
+      "estoqueMinimo": 0,
+      "observacao": "Produto criado automaticamente do menu",
+      "createdAt": "2025-12-12T11:54:53.159Z",
+      "updatedAt": "2025-12-14T02:07:10.591Z"
+    }
+  ],
+  "cameraFria": []
+}

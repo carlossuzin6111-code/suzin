@@ -1,0 +1,62 @@
+[
+  {
+    "id": 1765678140347,
+    "data": "2025-12-14T02:09:00.347Z",
+    "tipo": "saida",
+    "local": "geladeiras",
+    "produtoId": 1765540494163,
+    "produtoNome": "Guaraná Lata",
+    "quantidade": 12,
+    "valorUnitario": 7,
+    "total": 84,
+    "observacao": "Venda realizada"
+  },
+  {
+    "id": 1765678140330,
+    "data": "2025-12-14T02:09:00.330Z",
+    "tipo": "saida",
+    "local": "geladeiras",
+    "produtoId": 1765540493172,
+    "produtoNome": "Coca-Cola Lata",
+    "quantidade": 1,
+    "valorUnitario": 9,
+    "total": 9,
+    "observacao": "Venda realizada"
+  },
+  {
+    "id": 1765678045738,
+    "data": "2025-12-14T02:07:25.738Z",
+    "tipo": "entrada",
+    "local": "geladeiras",
+    "produtoId": 1765540494163,
+    "produtoNome": "Guaraná Lata",
+    "quantidade": 12,
+    "valorUnitario": 7,
+    "total": 84,
+    "observacao": "recrg"
+  },
+  {
+    "id": 1765677871328,
+    "data": "2025-12-14T02:04:31.329Z",
+    "tipo": "saida",
+    "local": "geladeiras",
+    "produtoId": 1765540493172,
+    "produtoNome": "Coca-Cola Lata",
+    "quantidade": 4,
+    "valorUnitario": 7,
+    "total": 28,
+    "observacao": "Venda realizada"
+  },
+  {
+    "id": 1765544286606,
+    "data": "2025-12-12T12:58:06.606Z",
+    "tipo": "entrada",
+    "local": "geladeiras",
+    "produtoId": 1765540493172,
+    "produtoNome": "Coca-Cola Lata",
+    "quantidade": 25,
+    "valorUnitario": 7,
+    "total": 175,
+    "observacao": ""
+  }
+]

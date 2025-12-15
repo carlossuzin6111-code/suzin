@@ -1,0 +1,105 @@
+[
+  {
+    "id": 1765541993713,
+    "nome": "Formatura Passos Firmes",
+    "data": "2025-12-12",
+    "descricao": "",
+    "itens": [
+      {
+        "produtoId": 1765540493172,
+        "produtoNome": "Coca-Cola Lata",
+        "quantidadeInicial": 100,
+        "quantidadeAtual": 200,
+        "reposicoes": [],
+        "quantidadeFisicaRestante": 12,
+        "quantidadeConsumida": 88,
+        "totalDisponivel": 100
+      },
+      {
+        "produtoId": 1765540494163,
+        "produtoNome": "Guaraná Lata",
+        "quantidadeInicial": 1000,
+        "quantidadeAtual": 2000,
+        "reposicoes": [],
+        "quantidadeFisicaRestante": 980,
+        "quantidadeConsumida": 20,
+        "totalDisponivel": 1000
+      },
+      {
+        "produtoId": 1765540495182,
+        "produtoNome": "Sprite Lata",
+        "quantidadeInicial": 15,
+        "quantidadeAtual": 30,
+        "reposicoes": [],
+        "quantidadeFisicaRestante": 10,
+        "quantidadeConsumida": 5,
+        "totalDisponivel": 15
+      }
+    ],
+    "finalizado": true,
+    "dataCriacao": "2025-12-12T12:19:53.713Z",
+    "dataFinalizacao": "2025-12-12T12:24:51.565Z"
+  },
+  {
+    "id": 1765543058282,
+    "nome": "Euclides",
+    "data": "2025-12-12",
+    "descricao": "sdasd",
+    "itens": [
+      {
+        "produtoId": 1765540493172,
+        "produtoNome": "Coca-Cola Lata",
+        "quantidadeInicial": 150,
+        "quantidadeAtual": 400,
+        "reposicoes": [
+          {
+            "quantidade": 250,
+            "data": "2025-12-12T12:37:54.713Z"
+          }
+        ],
+        "quantidadeFisicaRestante": 100,
+        "quantidadeConsumida": 300,
+        "totalDisponivel": 400
+      },
+      {
+        "produtoId": 1765540494163,
+        "produtoNome": "Guaraná Lata",
+        "quantidadeInicial": 150,
+        "quantidadeAtual": 150,
+        "reposicoes": [],
+        "quantidadeFisicaRestante": 50,
+        "quantidadeConsumida": 100,
+        "totalDisponivel": 150
+      }
+    ],
+    "finalizado": true,
+    "dataCriacao": "2025-12-12T12:37:38.282Z",
+    "dataFinalizacao": "2025-12-12T12:38:05.173Z"
+  },
+  {
+    "id": 1765678206267,
+    "nome": "Agrobona",
+    "data": "2025-12-14",
+    "descricao": "",
+    "itens": [
+      {
+        "produtoId": 1765540493172,
+        "produtoNome": "Coca-Cola Lata",
+        "quantidadeInicial": 240,
+        "quantidadeAtual": 264,
+        "reposicoes": [
+          {
+            "quantidade": 24,
+            "data": "2025-12-14T02:10:24.862Z"
+          }
+        ],
+        "quantidadeFisicaRestante": 12,
+        "quantidadeConsumida": 252,
+        "totalDisponivel": 264
+      }
+    ],
+    "finalizado": true,
+    "dataCriacao": "2025-12-14T02:10:06.267Z",
+    "dataFinalizacao": "2025-12-14T02:10:48.832Z"
+  }
+]
